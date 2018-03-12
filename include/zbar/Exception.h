@@ -32,6 +32,7 @@
 
 #include <exception>
 #include <new>
+#include <stddef.h>
 
 namespace zbar {
 
