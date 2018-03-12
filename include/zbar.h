@@ -139,6 +139,12 @@ typedef enum zbar_config_e {
     ZBAR_CFG_Y_DENSITY,         /**< image scanner horizontal scan density */
 } zbar_config_t;
 
+typedef struct zbar_point_int
+{
+	int nX;
+	int nY;
+} zbar_point_int_t;
+
 /** retrieve runtime library version information.
  * @param major set to the running major version (unless NULL)
  * @param minor set to the running minor version (unless NULL)
@@ -473,6 +479,11 @@ extern unsigned long zbar_image_get_data_length(const zbar_image_t *img);
  */
 extern const zbar_symbol_set_t*
 zbar_image_get_symbols(const zbar_image_t *image);
+
+/* Get Center point
+ * Return num of centers
+*/
+extern int zbar_image_get_center(const zbar_image_t *img, zbar_point_int_t ** const ppQRCenters);
 
 /** associate the specified symbol set with the image, replacing any
  * existing results.  use NULL to release the current results from the

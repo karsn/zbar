@@ -3931,6 +3931,26 @@ int _zbar_qr_decode (qr_reader *reader,
             ncenters);
     qr_svg_centers(centers, ncenters);
 
+	/* Update pCenters Point */
+	if(img->pCenters)
+	{
+		free(img->pCenters);
+		img->nCenters = 0;
+	}
+
+	if(ncenters)
+	{
+		img->pCenters = (zbar_point_int_t *)calloc(ncenters, sizeof(zbar_point_int_t));
+		for(img->nCenters=0; img->nCenters<ncenters; img->nCenters++)
+		{
+			img->pCenters[img->nCenters].nX = centers[img->nCenters].pos[0]/4;
+			img->pCenters[img->nCenters].nY = centers[img->nCenters].pos[1]/4;	
+		}
+	}
+	else
+	{
+		img->nCenters = 0;
+	}
     if(ncenters >= 3) {
         void *bin = qr_binarize(img->data, img->width, img->height);
 

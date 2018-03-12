@@ -777,6 +777,7 @@ int zbar_scan_image (zbar_image_scanner_t *iscn,
     return(syms->nsyms);
 }
 
+
 #ifdef DEBUG_SVG
 /* FIXME lame...*/
 # include "svg.c"

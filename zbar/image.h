@@ -76,6 +76,12 @@ struct zbar_image_s {
 
     unsigned seq;               /* page/frame sequence number */
     zbar_symbol_set_t *syms;    /* decoded result set */
+
+#ifdef ENABLE_QRCODE
+	zbar_point_int_t *pCenters;         /* QR Code: centers */
+    int nCenters;               /* QR Code: num of centers */
+#endif
+	
 };
 
 /* description of an image format */

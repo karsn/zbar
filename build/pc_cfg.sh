@@ -7,7 +7,7 @@ NM=nm ../configure --disable-shared \
                    --without-gtk \
                    --without-x \
                    --without-python \
-                   --without-imagemagick \
+#                   --without-imagemagick \
                    --without-xshm \
                    --without-npapi \
                    --enable-codes=qrcode
