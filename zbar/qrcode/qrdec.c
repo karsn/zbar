@@ -433,7 +433,9 @@ static int qr_finder_centers_locate(qr_finder_center **_centers,
   vclusters=(qr_finder_cluster *)malloc((nvlines>>1)*sizeof(*vclusters));
   nvclusters=qr_finder_cluster_lines(vclusters,vneighbors,vlines,nvlines,1);
   /*Find line crossings among the clusters.*/
-  if(nhclusters>=3&&nvclusters>=3){
+  //if(nhclusters>=3&&nvclusters>=3)
+  if(nhclusters>0&&nvclusters>0)
+  {
     qr_finder_edge_pt  *edge_pts;
     qr_finder_center   *centers;
     int                 nedge_pts;
@@ -450,7 +452,8 @@ static int qr_finder_centers_locate(qr_finder_center **_centers,
     *_centers=centers;
     *_edge_pts=edge_pts;
   }
-  else ncenters=0;
+  else 
+  	ncenters=0;
   free(vclusters);
   free(vneighbors);
   free(hclusters);
@@ -3935,6 +3938,7 @@ int _zbar_qr_decode (qr_reader *reader,
 	if(img->pCenters)
 	{
 		free(img->pCenters);
+		img->pCenters = NULL;
 		img->nCenters = 0;
 	}
 
@@ -3951,6 +3955,8 @@ int _zbar_qr_decode (qr_reader *reader,
 	{
 		img->nCenters = 0;
 	}
+
+	/*
     if(ncenters >= 3) {
         void *bin = qr_binarize(img->data, img->width, img->height);
 
@@ -3966,6 +3972,7 @@ int _zbar_qr_decode (qr_reader *reader,
         qr_code_data_list_clear(&qrlist);
         free(bin);
     }
+    */
     svg_group_end();
 
     if(centers)

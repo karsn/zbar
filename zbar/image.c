@@ -180,13 +180,13 @@ const zbar_symbol_set_t *zbar_image_get_symbols (const zbar_image_t *img)
 int zbar_image_get_center(const zbar_image_t *img, zbar_point_int_t ** const ppQRCenters)
 {
 	
-	zprintf(14,"nCenters=%d\r\n",img->nCenters);
+	zprintf(0,"nCenters=%d\r\n",img->nCenters);
 	
 	if(img->nCenters)
 	{
 		for(int i=0; i<img->nCenters; i++)
 		{
-			zprintf(14,"center[%d]=(%d,%d)\r\n", i,
+			zprintf(0,"center[%d]=(%d,%d)\r\n", i,
 					                         img->pCenters[i].nX,
 					                         img->pCenters[i].nY);
 		}
@@ -198,6 +198,20 @@ int zbar_image_get_center(const zbar_image_t *img, zbar_point_int_t ** const ppQ
 	}
 	
 	return img->nCenters;
+}
+
+void zbar_image_free_center(zbar_image_t *const img, zbar_point_int_t * const pQRCenters)
+{
+	if(pQRCenters != NULL)
+	{
+		free(pQRCenters);
+	}
+	else if(img != NULL)
+	{
+		free(img->pCenters);
+		img->pCenters = NULL;
+		img->nCenters = 0;
+	}
 }
 
 void zbar_image_set_symbols (zbar_image_t *img,

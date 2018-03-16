@@ -485,6 +485,8 @@ zbar_image_get_symbols(const zbar_image_t *image);
 */
 extern int zbar_image_get_center(const zbar_image_t *img, zbar_point_int_t ** const ppQRCenters);
 
+void zbar_image_free_center(zbar_image_t *const img, zbar_point_int_t * const pQRCenters);
+
 /** associate the specified symbol set with the image, replacing any
  * existing results.  use NULL to release the current results from the
  * image.

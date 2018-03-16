@@ -24,7 +24,7 @@
 #include "error.h"
 #include <string.h>
 
-int _zbar_verbosity = 20;
+int _zbar_verbosity = 0;
 
 static const char * const sev_str[] = {
     "FATAL ERROR", "ERROR", "OK", "WARNING", "NOTE"

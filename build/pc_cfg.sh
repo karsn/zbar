@@ -1,5 +1,5 @@
 #!/bin/bash
-export CFLAGS=""
+export CFLAGS="-fPIC"
 
 NM=nm ../configure --disable-shared \
                    --disable-video \
@@ -7,7 +7,8 @@ NM=nm ../configure --disable-shared \
                    --without-gtk \
                    --without-x \
                    --without-python \
-#                   --without-imagemagick \
                    --without-xshm \
                    --without-npapi \
                    --enable-codes=qrcode
+
+#                   --without-imagemagick \
