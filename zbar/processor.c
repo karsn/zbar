@@ -80,7 +80,7 @@ int _zbar_process_image (zbar_processor_t *proc,
         zbar_image_scanner_recycle_image(proc->scanner, img);
         int nsyms = zbar_scan_image(proc->scanner, tmp);
 		
-		zbar_point_int_t *lptrv_QRPoint = NULL;
+		TruZbarPattern *lptrv_QRPoint = NULL;
 		int ls32v_NumCenters = zbar_image_get_center(tmp, &lptrv_QRPoint);
 		
         _zbar_image_swap_symbols(img, tmp);

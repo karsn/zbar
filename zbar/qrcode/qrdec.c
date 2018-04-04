@@ -254,16 +254,20 @@ static int qr_finder_edge_pts_fill(qr_finder_edge_pt *_edge_pts,int _nedge_pts,
     for(j=0;j<c->nlines;j++){
       qr_finder_line *l;
       l=c->lines[j];
-      if(l->boffs>0){
+      if((l->boffs>0) && (l->eoffs>0)){
         _edge_pts[_nedge_pts].pos[0]=l->pos[0];
         _edge_pts[_nedge_pts].pos[1]=l->pos[1];
         _edge_pts[_nedge_pts].pos[_v]-=l->boffs;
+		_edge_pts[_nedge_pts].edge = _v*2;
+		_edge_pts[_nedge_pts].extent = l->boffs + l->len + l->eoffs;
         _nedge_pts++;
-      }
-      if(l->eoffs>0){
+      //}
+      //if(l->eoffs>0){
         _edge_pts[_nedge_pts].pos[0]=l->pos[0];
         _edge_pts[_nedge_pts].pos[1]=l->pos[1];
         _edge_pts[_nedge_pts].pos[_v]+=l->len+l->eoffs;
+		_edge_pts[_nedge_pts].edge = _v*2+1;
+		_edge_pts[_nedge_pts].extent = l->boffs + l->len + l->eoffs;
         _nedge_pts++;
       }
     }
@@ -3944,11 +3948,63 @@ int _zbar_qr_decode (qr_reader *reader,
 
 	if(ncenters)
 	{
-		img->pCenters = (zbar_point_int_t *)calloc(ncenters, sizeof(zbar_point_int_t));
+		img->pCenters = (TruZbarPattern *)calloc(ncenters, sizeof(*(img->pCenters)));
 		for(img->nCenters=0; img->nCenters<ncenters; img->nCenters++)
 		{
+			int ls32v_CntX = 0;
+			int ls32v_CntY = 0;
+			
 			img->pCenters[img->nCenters].nX = centers[img->nCenters].pos[0]/4;
-			img->pCenters[img->nCenters].nY = centers[img->nCenters].pos[1]/4;	
+			img->pCenters[img->nCenters].nY = centers[img->nCenters].pos[1]/4;
+
+			//printf("%s(): pCenters[%d,%d]-%d:", __func__, 
+			//	                             img->pCenters[img->nCenters].nX,
+			//	                             img->pCenters[img->nCenters].nY,
+			//	                             centers[img->nCenters].nedge_pts);
+
+			img->pCenters[img->nCenters].nSizeX = 0;
+			img->pCenters[img->nCenters].nSizeY = 0;
+			for(int i=0; i<centers[img->nCenters].nedge_pts; i++)
+			{
+				if(centers[img->nCenters].edge_pts[i].edge < 2)
+				{
+					ls32v_CntX++;
+					img->pCenters[img->nCenters].nSizeX += centers[img->nCenters].edge_pts[i].extent;
+				}
+				else
+				{
+					ls32v_CntY++;
+					img->pCenters[img->nCenters].nSizeY += centers[img->nCenters].edge_pts[i].extent;
+				}
+				//printf("(%d,%d,%d,%d)\r\n",centers[img->nCenters].edge_pts[i].pos[0],
+				//	                       centers[img->nCenters].edge_pts[i].pos[1],
+				//	                       centers[img->nCenters].edge_pts[i].edge,
+				//	                       centers[img->nCenters].edge_pts[i].extent);
+
+				if((ls32v_CntX>32) && (ls32v_CntY>32))
+				{
+					break;
+				}
+			}
+
+			if(ls32v_CntX)
+			{
+				img->pCenters[img->nCenters].nSizeX /= ls32v_CntX;
+			}
+			else
+			{
+				img->pCenters[img->nCenters].nSizeX = -1;
+			}
+
+			if(ls32v_CntY)
+			{
+				img->pCenters[img->nCenters].nSizeY /= ls32v_CntY;
+			}
+			else
+			{
+				img->pCenters[img->nCenters].nSizeY = -1;
+			}
+			
 		}
 	}
 	else
