@@ -522,26 +522,26 @@ static inline zbar_symbol_type_t integrate_partial (ean_decoder_t *ean,
 
     if(part == ZBAR_EAN13) {
         /* special case EAN-13 subsets */
-        //if(!ean->buf[0] && TEST_CFG(ean->upca_config, ZBAR_CFG_ENABLE))
-        //    part = ZBAR_UPCA;
-        //else if(ean->buf[0] == 9 && ean->buf[1] == 7) {
-        //    /* ISBN-10 has priority over ISBN-13(?) */
-        //    if(ean->buf[2] == 8 &&
-        //       TEST_CFG(ean->isbn10_config, ZBAR_CFG_ENABLE))
-        //        part = ZBAR_ISBN10;
-        //    else if((ean->buf[2] == 8 || ean->buf[2] == 9) &&
-        //       TEST_CFG(ean->isbn13_config, ZBAR_CFG_ENABLE))
-        //        part = ZBAR_ISBN13;
-		//}
-		if(((ean->buf[0]==9)&&(ean->buf[1]==7))
-		&& ((ean->buf[2]==8)||(ean->buf[2]==9))
-		&& TEST_CFG(ean->isbn13_config, ZBAR_CFG_ENABLE)){
-			part = ZBAR_ISBN13;
-        }
-		else
-		{
-			part = ZBAR_NONE;
+        if(!ean->buf[0] && TEST_CFG(ean->upca_config, ZBAR_CFG_ENABLE))
+            part = ZBAR_NONE; //ZBAR_UPCA;
+        else if(ean->buf[0] == 9 && ean->buf[1] == 7) {
+            /* ISBN-10 has priority over ISBN-13(?) */
+            if(ean->buf[2] == 8 &&
+               TEST_CFG(ean->isbn10_config, ZBAR_CFG_ENABLE))
+                part = ZBAR_ISBN13; //ZBAR_ISBN10;
+            else if((ean->buf[2] == 8 || ean->buf[2] == 9) &&
+               TEST_CFG(ean->isbn13_config, ZBAR_CFG_ENABLE))
+                part = ZBAR_ISBN13;
 		}
+		//if(((ean->buf[0]==9)&&(ean->buf[1]==7))
+		//&& ((ean->buf[2]==8)||(ean->buf[2]==9))
+		//&& TEST_CFG(ean->isbn13_config, ZBAR_CFG_ENABLE)){
+		//	part = ZBAR_ISBN13;
+        //}
+		//else
+		//{
+		//	part = ZBAR_NONE;
+		//}
     }
     else if(part == ZBAR_UPCE) {
         //if(TEST_CFG(ean->upce_config, ZBAR_CFG_ENABLE)) {
